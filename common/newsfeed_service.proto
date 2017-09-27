@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import "newsfeed_messages.proto";
+
+package newsfeed.proto;
+
+service Newsfeed {
+    rpc Talk(stream req_envelope) returns (stream req_envelope);
+}

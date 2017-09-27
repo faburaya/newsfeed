@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "newsfeed_client", "newsfeed_client\newsfeed_client.vcxproj", "{EC697653-4BF4-492C-913B-8D6571D5BA3E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common\common.vcxproj", "{5048AABA-A805-426F-87B0-34115E3AC08C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "newsfeed_server", "newsfeed_server\newsfeed_server.vcxproj", "{9AB73263-7D6C-47A5-96EF-374D450D80B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC697653-4BF4-492C-913B-8D6571D5BA3E}.Debug|x64.ActiveCfg = Debug|x64
+		{EC697653-4BF4-492C-913B-8D6571D5BA3E}.Debug|x64.Build.0 = Debug|x64
+		{EC697653-4BF4-492C-913B-8D6571D5BA3E}.Release|x64.ActiveCfg = Release|x64
+		{EC697653-4BF4-492C-913B-8D6571D5BA3E}.Release|x64.Build.0 = Release|x64
+		{5048AABA-A805-426F-87B0-34115E3AC08C}.Debug|x64.ActiveCfg = Debug|x64
+		{5048AABA-A805-426F-87B0-34115E3AC08C}.Debug|x64.Build.0 = Debug|x64
+		{5048AABA-A805-426F-87B0-34115E3AC08C}.Release|x64.ActiveCfg = Release|x64
+		{5048AABA-A805-426F-87B0-34115E3AC08C}.Release|x64.Build.0 = Release|x64
+		{9AB73263-7D6C-47A5-96EF-374D450D80B5}.Debug|x64.ActiveCfg = Debug|x64
+		{9AB73263-7D6C-47A5-96EF-374D450D80B5}.Debug|x64.Build.0 = Debug|x64
+		{9AB73263-7D6C-47A5-96EF-374D450D80B5}.Release|x64.ActiveCfg = Release|x64
+		{9AB73263-7D6C-47A5-96EF-374D450D80B5}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

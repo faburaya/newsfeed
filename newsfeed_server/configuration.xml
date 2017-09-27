@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <entry key="serviceEndpoint"            value="0.0.0.0:80" />
+    <entry key="awsRegion"                  value="your region" /><!-- example: us-west-1, sa-east-1... -->
+    <entry key="awsAccessKeyId"             value="your access key id" />
+    <entry key="awsSecretKey"               value="your secret key" />
+    <entry key="dbReqMaxRetryCount"         value="2" />
+    <entry key="dbReqRetryIntervalMs"       value="20" />
+    <entry key="dbOldNewsPurgeAgeSecs"      value="30" />
+    <entry key="newsPollingIntervalSecs"    value="3" />
+</configuration>
