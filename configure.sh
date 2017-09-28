@@ -14,7 +14,7 @@ else
     exit
 fi
 
-CMAKE_OPTIONS='-DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEBUG_POSTFIX=d -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS="-std=c++11"'
+CMAKE_OPTIONS='-DCMAKE_BUILD_TYPE=Release -DCMAKE_DEBUG_POSTFIX=d -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS="-std=c++11"'
 
 { ls lib || mkdir lib; } &> /dev/null
 { ls bin || mkdir bin; } &> /dev/null

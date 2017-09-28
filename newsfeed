@@ -1,9 +1,9 @@
 #!/bin/sh
 
 case "$1" in 
-      start) 
-            cd $HOME 
-            ./newsfeed_server & 
+      start)
+            cd /opt/newsfeed/ 
+            ./newsfeed_server &
             ;; 
       stop) 
             killall -v newsfeed_server 
