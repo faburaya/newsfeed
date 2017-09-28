@@ -1,0 +1,462 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "vpc1": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "172.31.0.0/16",
+        "InstanceTenancy": "default",
+        "EnableDnsSupport": "true",
+        "EnableDnsHostnames": "true"
+      }
+    },
+    "subnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.80.0/20",
+        "AvailabilityZone": "us-east-1d",
+        "VpcId": {
+          "Ref": "vpc1"
+        }
+      }
+    },
+    "subnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.16.0/20",
+        "AvailabilityZone": "us-east-1a",
+        "VpcId": {
+          "Ref": "vpc1"
+        }
+      }
+    },
+    "subnet3": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.0.0/20",
+        "AvailabilityZone": "us-east-1c",
+        "VpcId": {
+          "Ref": "vpc1"
+        }
+      }
+    },
+    "subnet4": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.32.0/20",
+        "AvailabilityZone": "us-east-1b",
+        "VpcId": {
+          "Ref": "vpc1"
+        }
+      }
+    },
+    "subnet5": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.48.0/20",
+        "AvailabilityZone": "us-east-1e",
+        "VpcId": {
+          "Ref": "vpc1"
+        }
+      }
+    },
+    "subnet6": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.64.0/20",
+        "AvailabilityZone": "us-east-1f",
+        "VpcId": {
+          "Ref": "vpc1"
+        }
+      }
+    },
+    "igateway": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+      }
+    },
+    "dhcp1": {
+      "Type": "AWS::EC2::DHCPOptions",
+      "Properties": {
+        "DomainName": "ec2.internal",
+        "DomainNameServers": [
+          "AmazonProvidedDNS"
+        ]
+      }
+    },
+    "network1acl": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc1"
+        }
+      }
+    },
+    "routetable1": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc1"
+        }
+      }
+    },
+    "RootRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+            "AssumeRolePolicyDocument": {
+                "Version" : "2012-10-17",
+                "Statement": [ {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": [ "ec2.amazonaws.com" ]
+                    },
+                    "Action": [ "sts:AssumeRole" ]
+                } ]
+            },
+            "Policies": [
+                {
+                    "PolicyName": "root",
+                    "PolicyDocument": {
+                        "Version" : "2012-10-17",
+                        "Statement": [ 
+                            {
+                                "Action": [
+                                    "cloudwatch:DeleteAlarms",
+                                    "cloudwatch:DescribeAlarmHistory",
+                                    "cloudwatch:DescribeAlarms",
+                                    "cloudwatch:DescribeAlarmsForMetric",
+                                    "cloudwatch:GetMetricStatistics",
+                                    "cloudwatch:ListMetrics",
+                                    "cloudwatch:PutMetricAlarm",
+                                    "dynamodb:*",
+                                    "sns:CreateTopic",
+                                    "sns:DeleteTopic",
+                                    "sns:ListSubscriptions",
+                                    "sns:ListSubscriptionsByTopic",
+                                    "sns:ListTopics",
+                                    "sns:Subscribe",
+                                    "sns:Unsubscribe",
+                                    "sns:SetTopicAttributes"
+                                ],
+                                "Effect": "Allow",
+                                "Resource": "*",
+                                "Sid": "DDBConsole"
+                            },
+                            {
+                                "Action": [
+                                    "lambda:*",
+                                    "iam:ListRoles"
+                                ],
+                                "Effect": "Allow",
+                                "Resource": "*",
+                                "Sid": "DDBConsoleTriggers"
+                            },
+                            {
+                                "Action": [
+                                    "datapipeline:*",
+                                    "iam:ListRoles"
+                                ],
+                                "Effect": "Allow",
+                                "Resource": "*",
+                                "Sid": "DDBConsoleImportExport"
+                            },
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "iam:GetRolePolicy",
+                                    "iam:PassRole"
+                                ],
+                                "Resource": [ "*" ],
+                                "Sid": "IAMEDPRoles"
+                            },
+                            {
+                                "Action": [
+                                    "ec2:CreateTags",
+                                    "ec2:DescribeInstances",
+                                    "ec2:RunInstances",
+                                    "ec2:StartInstances",
+                                    "ec2:StopInstances",
+                                    "ec2:TerminateInstances",
+                                    "elasticmapreduce:*",
+                                    "datapipeline:*"
+                                ],
+                                "Effect": "Allow",
+                                "Resource": "*",
+                                "Sid": "EMR"
+                            },
+                            {
+                                "Action": [
+                                    "s3:DeleteObject",
+                                    "s3:Get*",
+                                    "s3:List*",
+                                    "s3:Put*"
+                                ],
+                                "Effect": "Allow",
+                                "Resource": [ "*" ],
+                                "Sid": "S3"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "IamInstanceProfileEC2FullAccessToDynamoDB": {
+        "Type": "AWS::IAM::InstanceProfile",
+        "Properties": {
+            "Roles": [ {
+               "Ref": "RootRole"
+            } ],
+            "InstanceProfileName": "IamInstanceProfileEC2FullAccessToDynamoDB"
+        }
+    },
+    "EC2InstanceNewsfeedServer": {
+        "Type": "AWS::EC2::Instance",
+        "Properties": {
+            "DisableApiTermination": "false",
+            "InstanceInitiatedShutdownBehavior": "stop",
+            "IamInstanceProfile": {
+                "Ref": "IamInstanceProfileEC2FullAccessToDynamoDB"
+            },
+            "ImageId": "ami-ec0efc96",
+            "InstanceType": "t2.micro",
+            "Monitoring": "false",
+            "NetworkInterfaces": [
+                {
+                    "DeleteOnTermination": "true",
+                    "DeviceIndex": 0,
+                    "SubnetId": {
+                        "Ref": "subnet2"
+                    },
+                    "GroupSet": [
+                        { "Ref": "sgwebserver" }
+                    ],
+                    "AssociatePublicIpAddress": "true"
+                }
+            ]
+        }
+    },
+    "tablenewsfeednewsbytopic": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "newsfeed_news_by_topic",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "bin_time_based_sk",
+            "AttributeType": "B"
+          },
+          {
+            "AttributeName": "topic",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "topic",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "bin_time_based_sk",
+            "KeyType": "RANGE"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": "1",
+          "WriteCapacityUnits": "1"
+        }
+      }
+    },
+    "tablenewsfeedtopicbyuser": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "newsfeed_topic_by_user",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "user_id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "user_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": "1",
+          "WriteCapacityUnits": "1"
+        }
+      }
+    },
+    "sgwebserver": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "webserver created 2017-09-27T23:10:16.094-03:00",
+        "VpcId": {
+          "Ref": "vpc1"
+        }
+      }
+    },
+    "networkaclentry1": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": "true",
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "100",
+        "NetworkAclId": {
+          "Ref": "network1acl"
+        }
+      }
+    },
+    "networkaclentry2": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "CidrBlock": "0.0.0.0/0",
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "100",
+        "NetworkAclId": {
+          "Ref": "network1acl"
+        }
+      }
+    },
+    "subnet6acl": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "network1acl"
+        },
+        "SubnetId": {
+          "Ref": "subnet6"
+        }
+      }
+    },
+    "subnet2acl": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "network1acl"
+        },
+        "SubnetId": {
+          "Ref": "subnet2"
+        }
+      }
+    },
+    "subnet5acl": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "network1acl"
+        },
+        "SubnetId": {
+          "Ref": "subnet5"
+        }
+      }
+    },
+    "subnet3acl": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "network1acl"
+        },
+        "SubnetId": {
+          "Ref": "subnet3"
+        }
+      }
+    },
+    "subnet4acl": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "network1acl"
+        },
+        "SubnetId": {
+          "Ref": "subnet4"
+        }
+      }
+    },
+    "subnet1acl": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "network1acl"
+        },
+        "SubnetId": {
+          "Ref": "subnet1"
+        }
+      }
+    },
+    "vpc1gateway": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc1"
+        },
+        "InternetGatewayId": {
+          "Ref": "igateway"
+        }
+      }
+    },
+    "route1": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "RouteTableId": {
+          "Ref": "routetable1"
+        },
+        "GatewayId": {
+          "Ref": "igateway"
+        }
+      },
+      "DependsOn": "vpc1gateway"
+    },
+    "dhcp1assoc": {
+      "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc1"
+        },
+        "DhcpOptionsId": {
+          "Ref": "dhcp1"
+        }
+      }
+    },
+    "sgingress1": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgwebserver"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": "80",
+        "ToPort": "80",
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "sgingress2": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgwebserver"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": "22",
+        "ToPort": "22",
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "sgegress1": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgwebserver"
+        },
+        "IpProtocol": "-1",
+        "CidrIp": "0.0.0.0/0"
+      }
+    }
+  },
+  "Description": "miniclip news feed service"
+}
