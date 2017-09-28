@@ -79,6 +79,12 @@ int main(int argc, char *argv[])
         
         std::unique_ptr<grpc::Server> server = srvBuilder.BuildAndStart();
 
+        if (!server)
+        {
+            std::cerr << "News feed service host could not be started!\n" << std::endl;
+            return EXIT_FAILURE;
+        }
+
         serverIntfPtr = server.get(); // for global access (signal handling)
 
         signal(SIGINT, &termSignalHandler);
