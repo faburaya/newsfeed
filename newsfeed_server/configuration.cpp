@@ -22,8 +22,8 @@ namespace newsfeed
 
         settings.serviceEndpoint         = config->getString("entry[@key='serviceEndpoint'][@value]", "0.0.0.0:8080");
         settings.awsRegion               = config->getString("entry[@key='awsRegion'][@value]", "us-east-1");
-        settings.awsAccessKeyId          = config->getString("entry[@key='awsAccessKeyId'][@value]", "undefined access key id");
-        settings.awsSecretKey            = config->getString("entry[@key='awsSecretKey'][@value]", "undefined secret key");
+        settings.awsAccessKeyId          = config->getString("entry[@key='awsAccessKeyId'][@value]", "");
+        settings.awsSecretKey            = config->getString("entry[@key='awsSecretKey'][@value]", "");
         settings.dbReqMaxRetryCount      = config->getUInt("entry[@key='dbReqMaxRetryCount'][@value]", 2);
         settings.dbReqRetryIntervalMs    = config->getUInt("entry[@key='dbReqRetryIntervalMs'][@value]", 30);
         settings.dbOldNewsPurgeAgeSecs   = config->getUInt("entry[@key='dbOldNewsPurgeAgeSecs'][@value]", 60);

@@ -73,15 +73,22 @@ namespace newsfeed
         Aws::Client::ClientConfiguration config;
         config.region = Configuration::Get().settings.awsRegion;
 
-        conn = Aws::New<DbConnection>("ALLOC_TAG",
-            Aws::DynamoDB::DynamoDBClient(
-                Aws::Auth::AWSCredentials(
-                    Configuration::Get().settings.awsAccessKeyId,
-                    Configuration::Get().settings.awsSecretKey
-                ),
-                config
-            )
-        );
+        const auto &awsAccessKeyId = Configuration::Get().settings.awsAccessKeyId;
+        const auto &awsSecretKey = Configuration::Get().settings.awsSecretKey;
+
+        /* No keys defined in configuration file? Then assume that access will be
+        granted by a role associated to the EC2 instance running this application: */
+
+        if (awsAccessKeyId.empty() && awsSecretKey.empty())
+        {
+            conn = Aws::New<DbConnection>("ALLOC_TAG", Aws::DynamoDB::DynamoDBClient(config));
+        }
+        else
+        {
+            conn = Aws::New<DbConnection>("ALLOC_TAG",
+                Aws::DynamoDB::DynamoDBClient(Aws::Auth::AWSCredentials(awsAccessKeyId, awsSecretKey), config)
+            );
+        }
 
         return ConnWrapper(*this, conn);
     }
