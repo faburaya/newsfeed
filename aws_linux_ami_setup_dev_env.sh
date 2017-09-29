@@ -3,9 +3,9 @@
 # # #
 # SETUP DEV ENV
 #
-sudo yum groups install development
-sudo yum groups install development-libs
-sudo yum install clang
+sudo yum groups install -y development
+sudo yum groups install -y development-libs
+sudo yum install -y clang
 export CC=clang
 export CXX=clang++
 wget https://cmake.org/files/v3.8/cmake-3.8.2.tar.gz
@@ -23,7 +23,7 @@ rm -rf ./cmake*
 #
 wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.bz2
 tar -xf boost_1_65_1.tar.bz2
-cd boost_1_65_1/cd tools/build/
+cd boost_1_65_1/tools/build/
 ./bootstrap.sh
 cd ../../
 ./tools/build/b2 -j 2 variant=debug link=static threading=multi toolset=clang runtime-link=shared --layout=tagged
@@ -68,15 +68,17 @@ rm -rf ./aws-sdk-cpp*
 #
 git clone https://github.com/grpc/grpc -b v1.6.x
 cd grpc
+git checkout 2fdf1c00c2ebcb47a351e88c5480c60fac95dcf6
 git submodule update --init
 make
 sudo make install
-cd ../third_party/zlib
+cd ./third_party/zlib
+./configure
 make
 sudo make install
 cd ../protobuf/
 sudo make install
-cd ../../../../
+cd ../../../
 rm -rf grpc
 
 # # #
