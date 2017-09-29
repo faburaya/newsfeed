@@ -220,6 +220,7 @@
             },
             "ImageId": "ami-ec0efc96",
             "InstanceType": "t2.micro",
+            "KeyName": "MyEc2RsaKeyPairUsEast1",
             "Monitoring": "false",
             "NetworkInterfaces": [
                 {
@@ -436,6 +437,30 @@
       }
     },
     "sgingress2": {
+        "Type": "AWS::EC2::SecurityGroupIngress",
+        "Properties": {
+            "GroupId": {
+                "Ref": "sgwebserver"
+            },
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": "0.0.0.0/0"
+        }
+    },
+    "sgingress3": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgwebserver"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": "80",
+        "ToPort": "80",
+        "CidrIpv6": "::/0"
+      }
+    },
+    "sgingress4": {
       "Type": "AWS::EC2::SecurityGroupIngress",
       "Properties": {
         "GroupId": {
@@ -444,7 +469,7 @@
         "IpProtocol": "tcp",
         "FromPort": "22",
         "ToPort": "22",
-        "CidrIp": "0.0.0.0/0"
+        "CidrIpv6": "::/0"
       }
     },
     "sgegress1": {
