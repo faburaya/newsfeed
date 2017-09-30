@@ -9,4 +9,4 @@ wget https://s3-sa-east-1.amazonaws.com/faburaya-builds/aws_newsfeed_v1_2017.09/
 chmod +x newsfeed_server
 mkdir /opt/newsfeed
 mv newsfeed* /opt/newsfeed/
-/etc/init.d/newsfeed start
+sudo /etc/init.d/newsfeed start
